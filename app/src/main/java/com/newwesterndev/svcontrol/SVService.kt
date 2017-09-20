@@ -7,14 +7,28 @@ import android.location.Location
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
+import com.pawegio.kandroid.e
+import com.pawegio.kandroid.i
 
 class SVService : Service() {
+    private var mLowSpeed = null
+    private var mHighSpeed = null
+    private var mLowVolume = null
+    private var mHighVolume = null
     var locationManager: LocationManager? = null
 
     override fun onBind(intent: Intent?) = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
+        var lowSpeed = intent!!.getIntExtra("lowspeed", 0)
+        var highSpeed = intent.getIntExtra("highspeed", 0)
+        var lowVolume = intent.getIntExtra("lowvolume", 0)
+        var highVolume = intent.getIntExtra("highvolume", 0)
+        e(lowSpeed.toString())
+        e(highSpeed.toString())
+        e(lowVolume.toString())
+        e(highVolume.toString())
         return START_STICKY
     }
 
