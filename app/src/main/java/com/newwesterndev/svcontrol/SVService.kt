@@ -11,10 +11,6 @@ import com.pawegio.kandroid.e
 import com.pawegio.kandroid.i
 
 class SVService : Service() {
-    private var mLowSpeed = null
-    private var mHighSpeed = null
-    private var mLowVolume = null
-    private var mHighVolume = null
     var locationManager: LocationManager? = null
 
     override fun onBind(intent: Intent?) = null
@@ -25,10 +21,9 @@ class SVService : Service() {
         var highSpeed = intent.getIntExtra("highspeed", 0)
         var lowVolume = intent.getIntExtra("lowvolume", 0)
         var highVolume = intent.getIntExtra("highvolume", 0)
-        e(lowSpeed.toString())
-        e(highSpeed.toString())
-        e(lowVolume.toString())
-        e(highVolume.toString())
+
+        mVolController = VolController(this, lowSpeed, highSpeed, lowVolume, highVolume)
+
         return START_STICKY
     }
 
@@ -65,10 +60,8 @@ class SVService : Service() {
             }
     }
 
-
     companion object {
         val TAG = "LocationTrackingService"
-
         val INTERVAL = 1000.toLong() // In milliseconds
         val DISTANCE = 0.toFloat() // In meters
 
@@ -77,6 +70,8 @@ class SVService : Service() {
                 LTRLocationListener(LocationManager.NETWORK_PROVIDER)
         )
 
+        var mVolController: VolController ?= null
+
         class LTRLocationListener(provider: String) : android.location.LocationListener {
 
             val lastLocation = Location(provider)
@@ -84,6 +79,7 @@ class SVService : Service() {
             override fun onLocationChanged(location: Location?) {
                 lastLocation.set(location)
                 Log.e("Speed", location!!.speed.toString())
+                mVolController!!.controlVol(location.speed)
             }
 
             override fun onProviderDisabled(provider: String?) {
@@ -97,5 +93,4 @@ class SVService : Service() {
 
         }
     }
-
 }
