@@ -25,24 +25,6 @@
         android:id="@+id/low_volume_seek"
         style="@style/MainSeek"/>
 
-    <TextView
-        android:id="@+id/high_mph_text"
-        android:text="@string/default_high_mph_text"
-        style="@style/MainText"/>
-
-    <SeekBar
-        android:id="@+id/high_mph_seek"
-        style="@style/MainSeek"/>
-
-    <TextView
-        android:id="@+id/high_volume_text"
-        android:text="@string/default_high_volume_text"
-        style="@style/MainText"/>
-
-    <SeekBar
-        android:id="@+id/high_volume_seek"
-        style="@style/MainSeek"/>
-
     <Button
         android:id="@+id/start_button"
         android:layout_width="wrap_content"

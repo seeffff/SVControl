@@ -2,28 +2,35 @@ package com.newwesterndev.svcontrol
 
 import android.content.Context
 import android.media.AudioManager
-import android.media.MediaPlayer
-import android.provider.MediaStore
 import com.pawegio.kandroid.e
 
-class VolController(c: Context, ls: Int, hs: Int, lv: Int, hv: Int){
+class VolController(c: Context, ls: Int, lv: Int, uv: Int) {
 
-    private val mContext = c
     private val mLowSpeed = ls
-    private val mHighSpeed = hs
-    private val mLowVolume = lv
-    private val mHighVolume = hv
+    private val mUserHighVolume = uv
+    private var mLowStreamVolume = lowStreamVolume(lv.toFloat(), uv.toFloat())
 
     private var mAudioManager: AudioManager =
-            mContext.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+            c.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
-    fun controlVol(speed: Float){
-        e(speed.toString())
-        if(mAudioManager.isMusicActive){
-            e("true")
+    fun controlVol(speed: Float) {
+
+        e("Low stream vol " + mLowStreamVolume.toString())
+        e("User high vol  " + mUserHighVolume.toString())
+        e("Current vol " + mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC).toString())
+        e("Current speed " + speed.toString())
+        e("Speed to drop vol " + mLowSpeed.toString())
+
+        if (mAudioManager.isMusicActive) {
+            if (speed <= mLowSpeed && mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC) > mLowStreamVolume){
+                mAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_LOWER, 0)
+            } else if (speed > mLowSpeed && mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC) < mUserHighVolume) {
+                mAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, AudioManager.ADJUST_RAISE, 0)
+            }
         }
-        else{
-            e("false")
-        }
+    }
+
+    private fun lowStreamVolume(percent: Float, highVolume: Float): Int{
+        return ((percent/100) * highVolume).toInt()
     }
 }

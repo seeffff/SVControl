@@ -5,10 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.location.Location
 import android.location.LocationManager
+import android.media.AudioManager
 import android.os.Bundle
 import android.util.Log
-import com.pawegio.kandroid.e
-import com.pawegio.kandroid.i
 
 class SVService : Service() {
     var locationManager: LocationManager? = null
@@ -17,12 +16,15 @@ class SVService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
-        var lowSpeed = intent!!.getIntExtra("lowspeed", 0)
-        var highSpeed = intent.getIntExtra("highspeed", 0)
-        var lowVolume = intent.getIntExtra("lowvolume", 0)
-        var highVolume = intent.getIntExtra("highvolume", 0)
 
-        mVolController = VolController(this, lowSpeed, highSpeed, lowVolume, highVolume)
+        val lowSpeed = intent!!.getIntExtra("lowspeed", 0)
+        val lowVolumePercent = intent.getIntExtra("lowvolume", 0)
+
+        val mAudioManger: AudioManager = this.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
+        mStreamVol = mAudioManger.getStreamVolume(AudioManager.STREAM_MUSIC)
+        mVolController = VolController(this, lowSpeed, lowVolumePercent,
+                mAudioManger.getStreamVolume(AudioManager.STREAM_MUSIC))
 
         return START_STICKY
     }
@@ -62,7 +64,7 @@ class SVService : Service() {
 
     companion object {
         val TAG = "LocationTrackingService"
-        val INTERVAL = 1000.toLong() // In milliseconds
+        val INTERVAL = 750.toLong() // In milliseconds
         val DISTANCE = 0.toFloat() // In meters
 
         val locationListeners = arrayOf(
@@ -70,7 +72,8 @@ class SVService : Service() {
                 LTRLocationListener(LocationManager.NETWORK_PROVIDER)
         )
 
-        var mVolController: VolController ?= null
+        var mVolController: VolController? = null
+        var mStreamVol: Int? = null
 
         class LTRLocationListener(provider: String) : android.location.LocationListener {
 
@@ -78,8 +81,7 @@ class SVService : Service() {
 
             override fun onLocationChanged(location: Location?) {
                 lastLocation.set(location)
-                Log.e("Speed", location!!.speed.toString())
-                mVolController!!.controlVol(location.speed)
+                mVolController!!.controlVol(location!!.speed)
             }
 
             override fun onProviderDisabled(provider: String?) {

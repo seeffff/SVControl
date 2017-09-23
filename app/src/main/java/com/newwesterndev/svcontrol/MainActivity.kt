@@ -8,21 +8,16 @@ import android.widget.Button
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
-import butterknife.bindView
-import com.pawegio.kandroid.e
 import com.pawegio.kandroid.onProgressChanged
+import kotterknife.bindView
 
 class MainActivity : AppCompatActivity() {
 
     private val mStartButton: Button by bindView(R.id.start_button)
     private val mLowSpeedSeek: SeekBar by bindView(R.id.low_mph_seek)
     private val mLowVolumeSeek: SeekBar by bindView(R.id.low_volume_seek)
-    private val mHighSpeedSeek: SeekBar by bindView(R.id.high_mph_seek)
-    private val mHighVolumeSeek: SeekBar by bindView(R.id.high_volume_seek)
     private val mLowSpeedText: TextView by bindView(R.id.low_mph_text)
     private val mLowVolumeText: TextView by bindView(R.id.low_volume_text)
-    private val mHighSpeedText: TextView by bindView(R.id.high_mph_text)
-    private val mHighVolumeText: TextView by bindView(R.id.high_volume_text)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,9 +31,7 @@ class MainActivity : AppCompatActivity() {
         mStartButton.setOnClickListener { _ ->
             if (mStartButton.text == getString(R.string.start_button)) {
                 i.putExtra("lowspeed", mLowSpeedSeek.progress)
-                i.putExtra("highspeed", mHighSpeedSeek.progress)
                 i.putExtra("lowvolume", mLowVolumeSeek.progress)
-                i.putExtra("highvolume", mHighVolumeSeek.progress)
                 startService(i)
                 enableSeekBars(false)
                 showToast("Service has been started")
@@ -55,33 +48,21 @@ class MainActivity : AppCompatActivity() {
                 var progressString: String = progress.toString() + " " + resources.getString(R.string.speed_text)
                 mLowSpeedText.text = progressString
             }
-            mHighSpeedSeek.onProgressChanged { progress, _ ->
-                var progressString: String = progress.toString() + " " + resources.getString(R.string.speed_text)
-                mHighSpeedText.text = progressString
-            }
             mLowVolumeSeek.onProgressChanged { progress, _ ->
                 var progressString: String = progress.toString() + " " + resources.getString(R.string.percent_text)
                 mLowVolumeText.text = progressString
-            }
-            mHighVolumeSeek.onProgressChanged { progress, _ ->
-                var progressString: String = progress.toString() + " " + resources.getString(R.string.percent_text)
-                mHighVolumeText.text = progressString
             }
 
     }
 
     private fun init(){
         mLowSpeedSeek.max = 100
-        mHighSpeedSeek.max = 100
         mLowVolumeSeek.max = 100
-        mHighVolumeSeek.max = 100
     }
 
     private fun enableSeekBars(bool: Boolean){
         mLowSpeedSeek.isEnabled = bool
-        mHighSpeedSeek.isEnabled = bool
         mLowVolumeSeek.isEnabled = bool
-        mHighVolumeSeek.isEnabled = bool
     }
 
     private fun showToast(message: String){
