@@ -19,6 +19,8 @@ class MainActivity : AppCompatActivity() {
     private val mLowSpeedText: TextView by bindView(R.id.low_mph_text)
     private val mLowVolumeText: TextView by bindView(R.id.low_volume_text)
 
+    private val MPS_TO_MPH = 2.23694
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -45,7 +47,8 @@ class MainActivity : AppCompatActivity() {
         }
 
             mLowSpeedSeek.onProgressChanged { progress, _ ->
-                var progressString: String = progress.toString() + " " + resources.getString(R.string.speed_text)
+                var conversion = ((progress * MPS_TO_MPH).toFloat()).toInt()
+                var progressString: String = conversion.toString() + " " + resources.getString(R.string.speed_text)
                 mLowSpeedText.text = progressString
             }
             mLowVolumeSeek.onProgressChanged { progress, _ ->
@@ -56,7 +59,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun init(){
-        mLowSpeedSeek.max = 100
+        mLowSpeedSeek.max = 30
         mLowVolumeSeek.max = 100
     }
 
