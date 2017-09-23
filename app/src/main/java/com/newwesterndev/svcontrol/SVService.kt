@@ -66,6 +66,7 @@ class SVService : Service() {
         val TAG = "LocationTrackingService"
         val INTERVAL = 750.toLong() // In milliseconds
         val DISTANCE = 0.toFloat() // In meters
+        val MPS_TO_MPH = 2.23694
 
         val locationListeners = arrayOf(
                 LTRLocationListener(LocationManager.GPS_PROVIDER),
@@ -81,7 +82,7 @@ class SVService : Service() {
 
             override fun onLocationChanged(location: Location?) {
                 lastLocation.set(location)
-                mVolController!!.controlVol(location!!.speed)
+                mVolController!!.controlVol((location!!.speed * MPS_TO_MPH).toFloat())
             }
 
             override fun onProviderDisabled(provider: String?) {
