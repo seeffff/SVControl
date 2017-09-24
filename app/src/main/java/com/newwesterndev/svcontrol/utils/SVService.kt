@@ -1,4 +1,4 @@
-package com.newwesterndev.svcontrol
+package com.newwesterndev.svcontrol.utils
 
 import android.app.*
 import android.content.Context
@@ -10,7 +10,7 @@ import android.os.Bundle
 import android.util.Log
 
 class SVService : Service() {
-    var locationManager: LocationManager? = null
+    private var locationManager: LocationManager? = null
 
     override fun onBind(intent: Intent?) = null
 
@@ -18,13 +18,13 @@ class SVService : Service() {
         super.onStartCommand(intent, flags, startId)
 
         val lowSpeed = intent!!.getIntExtra("lowspeed", 0)
-        val lowVolumePercent = intent.getIntExtra("lowvolume", 0)
+        val lowVolume = intent.getIntExtra("lowvolume", 0)
 
         val mAudioManger: AudioManager = this.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
-        mStreamVol = mAudioManger.getStreamVolume(AudioManager.STREAM_MUSIC)
-        mVolController = VolController(this, lowSpeed, lowVolumePercent,
-                mAudioManger.getStreamVolume(AudioManager.STREAM_MUSIC))
+        mVolController = VolController(this, lowSpeed, lowVolume)
+        val mUtility = Utility(this)
+        mUtility.saveHighStream(mAudioManger.getStreamVolume(AudioManager.STREAM_MUSIC))
 
         return START_STICKY
     }
@@ -74,11 +74,10 @@ class SVService : Service() {
         )
 
         var mVolController: VolController? = null
-        var mStreamVol: Int? = null
 
         class LTRLocationListener(provider: String) : android.location.LocationListener {
 
-            val lastLocation = Location(provider)
+            private val lastLocation = Location(provider)
 
             override fun onLocationChanged(location: Location?) {
                 lastLocation.set(location)

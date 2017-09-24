@@ -1,6 +1,8 @@
 package com.newwesterndev.svcontrol
 
+import android.content.Context
 import android.content.Intent
+import android.media.AudioManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
@@ -8,6 +10,7 @@ import android.widget.Button
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
+import com.newwesterndev.svcontrol.utils.SVService
 import com.pawegio.kandroid.onProgressChanged
 import kotterknife.bindView
 
@@ -24,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 10)
 
-        init()
+        init(savedInstanceState)
         val i = Intent(this, SVService::class.java)
 
         mStartButton.setOnClickListener { _ ->
@@ -36,23 +39,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         mLowSpeedSeek.onProgressChanged { progress, _ ->
-            var progressString: String = progress.toString() + " " + resources.getString(R.string.speed_text)
+            val progressString: String = progress.toString() + " " + resources.getString(R.string.speed_text)
             mLowSpeedText.text = progressString
         }
         mLowVolumeSeek.onProgressChanged { progress, _ ->
-            var progressString: String = progress.toString() + " " + resources.getString(R.string.percent_text)
+            val progressString: String = progress.toString()
             mLowVolumeText.text = progressString
-        }
-
-        if(savedInstanceState != null){
-            var isRunning = savedInstanceState.getBoolean("running")
-            if(isRunning){
-                enableServiceActiveUI()
-            }
         }
     }
 
-    fun activateService(i: Intent) {
+    private fun activateService(i: Intent) {
         i.putExtra("lowspeed", mLowSpeedSeek.progress)
         i.putExtra("lowvolume", mLowVolumeSeek.progress)
         startService(i)
@@ -62,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         mStartButton.setText(getString(R.string.stop_button))
     }
 
-    fun deactivateService(i: Intent) {
+    private fun deactivateService(i: Intent) {
         stopService(i)
         mIsServiceRunning = false
         enableSeekBars(true)
@@ -70,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         mStartButton.setText(getString(R.string.start_button))
     }
 
-    fun enableServiceActiveUI(){
+    private fun enableServiceActiveUI(){
         enableSeekBars(false)
         mStartButton.setText(getString(R.string.stop_button))
     }
@@ -80,9 +76,18 @@ class MainActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
     }
 
-    private fun init() {
+    private fun init(savedInstanceState: Bundle?) {
+        mAudioManager = this.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
         mLowSpeedSeek.max = 50
-        mLowVolumeSeek.max = 100
+        mLowVolumeSeek.max = mAudioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC)!!.toInt()
+
+        if(savedInstanceState != null){
+            val isRunning = savedInstanceState.getBoolean("running")
+            if(isRunning){
+                enableServiceActiveUI()
+            }
+        }
     }
 
     private fun enableSeekBars(bool: Boolean) {
@@ -97,5 +102,6 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         var mIsServiceRunning = false
+        var mAudioManager: AudioManager? = null
     }
 }

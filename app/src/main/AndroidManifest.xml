@@ -25,7 +25,8 @@
         </activity>
 
         <service
-            android:name=".SVService">
+            android:name=".utils.SVService"
+            android:configChanges="keyboardHidden|orientation">
         </service>
     </application>
 

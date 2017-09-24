@@ -8,10 +8,7 @@
     <string name="service_stopped">Service has been stopped!</string>
 
     <string name="default_low_mph_text">0 mph</string>
-    <string name="default_low_volume_text">0%</string>
-    <string name="default_high_mph_text">0 mph</string>
-    <string name="default_high_volume_text">0%</string>
+    <string name="default_low_volume_text">0</string>
 
     <string name="speed_text">mph</string>
-    <string name="percent_text">%</string>
 </resources>
