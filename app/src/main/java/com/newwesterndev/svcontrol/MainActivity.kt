@@ -13,6 +13,7 @@ import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import com.newwesterndev.svcontrol.utils.SVService
+import com.newwesterndev.svcontrol.utils.Utility
 import com.pawegio.kandroid.onProgressChanged
 import com.pawegio.kandroid.startActivity
 import kotterknife.bindView
@@ -24,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     private val mLowVolumeSeek: SeekBar by bindView(R.id.low_volume_seek)
     private val mLowSpeedText: TextView by bindView(R.id.low_mph_text)
     private val mLowVolumeText: TextView by bindView(R.id.low_volume_text)
+    private val mUtility = Utility(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         mLowSpeedSeek.onProgressChanged { progress, _ ->
-            val progressString: String = progress.toString() + " " + resources.getString(R.string.speed_text)
+            val progressString: String = progress.toString() + " " + mUtility.getSpeedUnits()
             mLowSpeedText.text = progressString
         }
         mLowVolumeSeek.onProgressChanged { progress, _ ->
@@ -70,6 +72,7 @@ class MainActivity : AppCompatActivity() {
     private fun activateService(i: Intent) {
         i.putExtra("lowspeed", mLowSpeedSeek.progress)
         i.putExtra("lowvolume", mLowVolumeSeek.progress)
+        i.putExtra("speedunits", mUtility.getSpeedUnits())
         startService(i)
         mIsServiceRunning = true
         enableSeekBars(false)
@@ -95,7 +98,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun init(savedInstanceState: Bundle?) {
         mAudioManager = this.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        val defText = "0 " + mUtility.getSpeedUnits()
 
+        mLowSpeedText.text = defText
         mLowSpeedSeek.max = 50
         mLowVolumeSeek.max = mAudioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC)!!.toInt()
 
@@ -110,11 +115,6 @@ class MainActivity : AppCompatActivity() {
     private fun enableSeekBars(bool: Boolean) {
         mLowSpeedSeek.isEnabled = bool
         mLowVolumeSeek.isEnabled = bool
-    }
-
-    private fun showToast(message: String) {
-        val t: Toast = Toast.makeText(this, message, Toast.LENGTH_SHORT)
-        t.show()
     }
 
     companion object {

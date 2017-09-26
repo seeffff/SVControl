@@ -7,11 +7,15 @@
     <string name="service_started">Service has been started!</string>
     <string name="service_stopped">Service has been stopped!</string>
 
-    <string name="default_low_mph_text">0 mph</string>
     <string name="default_low_volume_text">0</string>
 
-    <string name="speed_text">mph</string>
+    <string name="mph_speed_text">mph</string>
+    <string name="kph_speed_text">kph</string>
 
     <string name="action_settings">Settings</string>
     <string name="action_settings_title">Settings</string>
+
+    <string name="prefs_speed_units_title">Units of Speed</string>
+    <string name="prefs_speed_units_summary">Click to choose preference</string>
+    <string name="prefs_units_key">units</string>
 </resources>

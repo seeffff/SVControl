@@ -9,7 +9,6 @@
 
     <TextView
         android:id="@+id/low_mph_text"
-        android:text="@string/default_low_mph_text"
         style="@style/MainText"/>
 
     <SeekBar

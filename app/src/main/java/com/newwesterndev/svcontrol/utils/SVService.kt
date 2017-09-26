@@ -19,6 +19,7 @@ class SVService : Service() {
 
         val lowSpeed = intent!!.getIntExtra("lowspeed", 0)
         val lowVolume = intent.getIntExtra("lowvolume", 0)
+        mSpeedUnits = intent.getStringExtra("speedunits")
 
         val mAudioManger: AudioManager = this.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
@@ -67,6 +68,7 @@ class SVService : Service() {
         val INTERVAL = 750.toLong() // In milliseconds
         val DISTANCE = 0.toFloat() // In meters
         val MPS_TO_MPH = 2.23694
+        val MPS_TO_KPH = 3.6
 
         val locationListeners = arrayOf(
                 LTRLocationListener(LocationManager.GPS_PROVIDER),
@@ -74,6 +76,7 @@ class SVService : Service() {
         )
 
         var mVolController: VolController? = null
+        var mSpeedUnits: String? = null
 
         class LTRLocationListener(provider: String) : android.location.LocationListener {
 
@@ -81,7 +84,10 @@ class SVService : Service() {
 
             override fun onLocationChanged(location: Location?) {
                 lastLocation.set(location)
-                mVolController!!.controlVol((location!!.speed * MPS_TO_MPH).toFloat())
+                if (mSpeedUnits == "mph")
+                    mVolController!!.controlVol((location!!.speed * MPS_TO_MPH).toFloat())
+                else
+                    mVolController!!.controlVol((location!!.speed * MPS_TO_KPH).toFloat())
             }
 
             override fun onProviderDisabled(provider: String?) {

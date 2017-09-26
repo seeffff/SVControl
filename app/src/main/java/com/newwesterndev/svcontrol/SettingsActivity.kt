@@ -1,8 +1,8 @@
 package com.newwesterndev.svcontrol
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
+import android.preference.ListPreference
 import android.preference.Preference
 import android.preference.PreferenceActivity
 import android.preference.PreferenceManager
@@ -12,12 +12,20 @@ class SettingsActivity : PreferenceActivity(), Preference.OnPreferenceChangeList
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         addPreferencesFromResource(R.xml.prefs_general)
+
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.prefs_units_key)))
     }
 
     override fun onPreferenceChange(preference: Preference, o: Any): Boolean {
         val stringValue = o.toString()
 
-        return false
+        if(preference is ListPreference ){
+            val prefIndex = preference.findIndexOfValue(stringValue)
+            if(prefIndex >= 0)
+                preference.setSummary(preference.entries[prefIndex])
+        }
+
+        return true
     }
 
     fun bindPreferenceSummaryToValue(preference: Preference){

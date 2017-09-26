@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="pref_units_options">
+        <item>@string/mph_speed_text</item>
+        <item>@string/kph_speed_text</item>
+    </string-array>
+
+</resources>

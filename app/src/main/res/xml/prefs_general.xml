@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-
+    <PreferenceCategory android:title="@string/action_settings_title">
+        <ListPreference
+            android:defaultValue="@string/mph_speed_text"
+            android:entries="@array/pref_units_options"
+            android:entryValues="@array/pref_units_options"
+            android:key="@string/prefs_units_key"
+            android:title="@string/prefs_speed_units_title"/>
+    </PreferenceCategory>
 
 </PreferenceScreen>
