@@ -11,4 +11,7 @@
     <string name="default_low_volume_text">0</string>
 
     <string name="speed_text">mph</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="action_settings_title">Settings</string>
 </resources>

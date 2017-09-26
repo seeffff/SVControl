@@ -6,12 +6,15 @@ import android.media.AudioManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import com.newwesterndev.svcontrol.utils.SVService
 import com.pawegio.kandroid.onProgressChanged
+import com.pawegio.kandroid.startActivity
 import kotterknife.bindView
 
 class MainActivity : AppCompatActivity() {
@@ -48,13 +51,28 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        val id = item!!.itemId
+
+        if(id == R.id.action_settings){
+            startActivity(Intent(this, SettingsActivity::class.java))
+            return true
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
     private fun activateService(i: Intent) {
         i.putExtra("lowspeed", mLowSpeedSeek.progress)
         i.putExtra("lowvolume", mLowVolumeSeek.progress)
         startService(i)
         mIsServiceRunning = true
         enableSeekBars(false)
-        showToast("Service has been started")
         mStartButton.setText(getString(R.string.stop_button))
     }
 
@@ -62,7 +80,6 @@ class MainActivity : AppCompatActivity() {
         stopService(i)
         mIsServiceRunning = false
         enableSeekBars(true)
-        showToast("Service has been stopped")
         mStartButton.setText(getString(R.string.start_button))
     }
 
