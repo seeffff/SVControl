@@ -18,4 +18,6 @@
     <string name="prefs_speed_units_title">Units of Speed</string>
     <string name="prefs_speed_units_summary">Click to choose preference</string>
     <string name="prefs_units_key">units</string>
+
+    <string name="notif_text">SVControl is running.</string>
 </resources>
