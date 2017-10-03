@@ -71,7 +71,11 @@ class SVService : Service() {
 
     private fun showNotification(){
         mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val pendingIntent = PendingIntent.getActivity(this, 0, Intent(this, MainActivity::class.java), 0)
+
+        val notifIntent = Intent(this, MainActivity::class.java)
+        notifIntent.putExtra("notifIntent", "notifIntent")
+
+        val pendingIntent = PendingIntent.getActivity(this, 0, notifIntent, 0)
         val builder = Notification.Builder(this)
 
         builder.setAutoCancel(false)

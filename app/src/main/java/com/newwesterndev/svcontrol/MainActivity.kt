@@ -14,6 +14,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.newwesterndev.svcontrol.utils.SVService
 import com.newwesterndev.svcontrol.utils.Utility
+import com.pawegio.kandroid.e
 import com.pawegio.kandroid.onProgressChanged
 import com.pawegio.kandroid.startActivity
 import kotterknife.bindView
@@ -31,6 +32,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 10)
+
+        if(intent.getStringExtra("notifIntent") != null) {
+            enableServiceActiveUI()
+        }
 
         init(savedInstanceState)
         val i = Intent(this, SVService::class.java)
