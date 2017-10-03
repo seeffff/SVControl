@@ -49,11 +49,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         mLowSpeedSeek.onProgressChanged { progress, _ ->
-            val progressString: String = progress.toString() + " " + mUtility.getSpeedUnits()
+            val progressString: String = "   " + progress.toString() + " " + mUtility.getSpeedUnits()
             mLowSpeedText.text = progressString
         }
         mLowVolumeSeek.onProgressChanged { progress, _ ->
-            val progressString: String = progress.toString()
+            val progressString: String = "   " + progress.toString()
             mLowVolumeText.text = progressString
         }
     }
@@ -103,9 +103,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun init(savedInstanceState: Bundle?) {
         mAudioManager = this.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        val defText = "0 " + mUtility.getSpeedUnits()
+        val defText = "   0 " + mUtility.getSpeedUnits()
 
         mLowSpeedText.text = defText
+        mLowVolumeText.text = "   0"
         mLowSpeedSeek.max = 50
         mLowVolumeSeek.max = mAudioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC)!!.toInt()
 

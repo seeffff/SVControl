@@ -9,6 +9,8 @@
 
     <string name="default_low_volume_text">0</string>
 
+    <string name="ui_speed_text">Speed to lower music volume: </string>
+    <string name="ui_volume_text">Volume music will be lowered to: </string>
     <string name="mph_speed_text">mph</string>
     <string name="kph_speed_text">kph</string>
 
