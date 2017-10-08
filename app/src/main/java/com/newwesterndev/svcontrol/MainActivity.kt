@@ -2,6 +2,8 @@ package com.newwesterndev.svcontrol
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.TransitionDrawable
 import android.media.AudioManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -11,13 +13,15 @@ import android.view.MenuItem
 import android.widget.Button
 import android.widget.SeekBar
 import android.widget.TextView
-import android.widget.Toast
 import com.newwesterndev.svcontrol.utils.SVService
 import com.newwesterndev.svcontrol.utils.Utility
 import com.pawegio.kandroid.e
 import com.pawegio.kandroid.onProgressChanged
-import com.pawegio.kandroid.startActivity
 import kotterknife.bindView
+import android.view.WindowManager
+import android.os.Build
+import android.widget.Toolbar
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 10)
 
-        if(intent.getStringExtra("notifIntent") != null) {
+        if (intent.getStringExtra("notifIntent") != null) {
             enableServiceActiveUI()
         }
 
@@ -66,7 +70,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         val id = item!!.itemId
 
-        if(id == R.id.action_settings){
+        if (id == R.id.action_settings) {
             startActivity(Intent(this, SettingsActivity::class.java))
             return true
         }
@@ -81,19 +85,22 @@ class MainActivity : AppCompatActivity() {
         startService(i)
         mIsServiceRunning = true
         enableSeekBars(false)
-        mStartButton.setText(getString(R.string.stop_button))
+        mStartButton.text = getString(R.string.stop_button)
+        colorTransition(true)
     }
 
     private fun deactivateService(i: Intent) {
         stopService(i)
         mIsServiceRunning = false
         enableSeekBars(true)
-        mStartButton.setText(getString(R.string.start_button))
+        mStartButton.text = getString(R.string.start_button)
+        colorTransition(false)
     }
 
-    private fun enableServiceActiveUI(){
+    private fun enableServiceActiveUI() {
         enableSeekBars(false)
-        mStartButton.setText(getString(R.string.stop_button))
+        mStartButton.text = getString(R.string.stop_button)
+        colorTransition(true)
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -110,11 +117,29 @@ class MainActivity : AppCompatActivity() {
         mLowSpeedSeek.max = 50
         mLowVolumeSeek.max = mAudioManager?.getStreamMaxVolume(AudioManager.STREAM_MUSIC)!!.toInt()
 
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             val isRunning = savedInstanceState.getBoolean("running")
-            if(isRunning){
+            if (isRunning) {
                 enableServiceActiveUI()
             }
+        }
+    }
+
+    private fun colorTransition(running: Boolean) {
+        val buttonTransition = mStartButton.background as TransitionDrawable
+
+        if (running) {
+            val window = window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = getColor(R.color.colorRedPrimaryDark)
+            supportActionBar!!.setBackgroundDrawable(ColorDrawable(getColor(R.color.colorRedPrimary)))
+            buttonTransition.startTransition(100)
+        } else {
+            val window = window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            window.statusBarColor = getColor(R.color.colorPrimaryDark)
+            supportActionBar!!.setBackgroundDrawable(ColorDrawable(getColor(R.color.colorPrimary)))
+            buttonTransition.reverseTransition(100)
         }
     }
 

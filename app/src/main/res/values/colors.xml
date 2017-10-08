@@ -15,5 +15,8 @@
     <color name="colorLighterTeal">#80CBC4</color>
     <color name="colorLightTeal">#4DB6AC</color>
 
+    <color name="colorRedPrimary">#E64A19</color>
+    <color name="colorRedPrimaryDark">#D84315</color>
+
 
 </resources>

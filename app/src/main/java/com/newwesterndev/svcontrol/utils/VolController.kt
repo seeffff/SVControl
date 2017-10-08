@@ -16,11 +16,11 @@ class VolController(c: Context, ls: Int, lv: Int) {
 
     fun controlVol(speed: Float) {
 
-        e("Low stream vol " + mLowStreamVolume.toString())
-        e("Current vol " + mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC).toString())
-        e("Current speed " + speed.toString())
-        e("Current last speed " + mLastSpeed.toString())
-        e("Speed to drop vol " + mLowSpeed.toString())
+//        e("Low stream vol " + mLowStreamVolume.toString())
+//        e("Current vol " + mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC).toString())
+//        e("Current speed " + speed.toString())
+//        e("Current last speed " + mLastSpeed.toString())
+//        e("Speed to drop vol " + mLowSpeed.toString())
 
         val currentStreamVolume = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC)
 
