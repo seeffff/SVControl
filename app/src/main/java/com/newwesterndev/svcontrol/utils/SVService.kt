@@ -81,7 +81,7 @@ class SVService : Service() {
         builder.setAutoCancel(false)
         builder.setContentTitle(resources.getString(R.string.app_name))
         builder.setContentText(resources.getString(R.string.notif_text))
-        builder.setSmallIcon(R.drawable.ic_volume_up_white_18dp)
+        builder.setSmallIcon(R.drawable.ic_status_icon)
         builder.setLargeIcon(BitmapFactory.decodeResource(resources, R.mipmap.ic_launcher))
         builder.setContentIntent(pendingIntent)
         builder.setOngoing(true)

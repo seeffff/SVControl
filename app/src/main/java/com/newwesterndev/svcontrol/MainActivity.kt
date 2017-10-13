@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
-        outState!!.putBoolean("running", mIsServiceRunning)
+        if(mIsServiceRunning) outState!!.putBoolean("running", mIsServiceRunning)
         super.onSaveInstanceState(outState)
     }
 
@@ -129,13 +129,11 @@ class MainActivity : AppCompatActivity() {
         val buttonTransition = mStartButton.background as TransitionDrawable
 
         if (running) {
-            val window = window
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = getColor(R.color.colorRedPrimaryDark)
             supportActionBar!!.setBackgroundDrawable(ColorDrawable(getColor(R.color.colorRedPrimary)))
             buttonTransition.startTransition(100)
         } else {
-            val window = window
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = getColor(R.color.colorPrimaryDark)
             supportActionBar!!.setBackgroundDrawable(ColorDrawable(getColor(R.color.colorPrimary)))
